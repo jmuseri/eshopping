@@ -1,12 +1,37 @@
 package com.hackerrank.eshopping.product.dashboard.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@Entity
 public class Product {
+	
+	@Id
+	@NotNull
     private Long id;
+	
+	@NotEmpty
     private String name;
-    private String category;
-    private Double retailPrice;
-    private Double discountedPrice;
-    private Boolean availability;
+	
+	@NotEmpty
+	private String category;
+	
+	@NotNull
+	private Double retailPrice;
+	
+	@NotNull
+	private Double discountedPrice;
+	
+	@NotNull
+	private Boolean availability;
+	
+
 
     public Product() {
     }
@@ -44,6 +69,7 @@ public class Product {
         this.category = category;
     }
 
+    @JsonProperty("retail_price")
     public Double getRetailPrice() {
         return retailPrice;
     }
@@ -52,6 +78,7 @@ public class Product {
         this.retailPrice = retailPrice;
     }
 
+    @JsonProperty("discounted_price")
     public Double getDiscountedPrice() {
         return discountedPrice;
     }
@@ -67,4 +94,7 @@ public class Product {
     public void setAvailability(Boolean availability) {
         this.availability = availability;
     }
+    
+
+    
 }
