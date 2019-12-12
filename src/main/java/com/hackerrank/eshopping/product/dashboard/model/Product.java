@@ -11,26 +11,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Entity
 public class Product {
-	
+
 	@Id
 	@NotNull
     private Long id;
-	
+
 	@NotEmpty
     private String name;
-	
+
 	@NotEmpty
 	private String category;
-	
+
 	@NotNull
 	private Double retailPrice;
-	
+
 	@NotNull
 	private Double discountedPrice;
-	
+
 	@NotNull
 	private Boolean availability;
-	
+
 
 
     public Product() {
@@ -94,7 +94,7 @@ public class Product {
     public void setAvailability(Boolean availability) {
         this.availability = availability;
     }
-    
 
-    
+
+
 }

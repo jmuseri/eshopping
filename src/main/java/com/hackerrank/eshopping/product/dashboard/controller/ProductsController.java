@@ -29,26 +29,26 @@ public class ProductsController {
 
 	@Autowired
 	private ProductRepository productRepository;
-	
+
 	/**
 	 * Add a Product.
 	 * @param product
-	 * @return 
-	 * @throws ProductBadRequestException 
+	 * @return
+	 * @throws ProductBadRequestException
 	 */
 	@RequestMapping(value = "", method = RequestMethod.POST, produces="application/json; charset=UTF-8")
 	public ResponseEntity<?> saveProduct(@RequestBody @Valid Product product) throws ProductBadRequestException {
 
 
 		if (productRepository.existsById(product.getId())) {
-			throw new ProductBadRequestException("Product already exist for this id : " + product.getId());	
+			throw new ProductBadRequestException("Product already exist for this id : " + product.getId());
 		}
 
 		productRepository.save(product);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-	
-	
+
+
 	/**
 	 * Update an existing product.
 	 * @param id
@@ -56,20 +56,20 @@ public class ProductsController {
 	 * @throws ProductBadRequestException
 	 */
 	@RequestMapping(value = "/{product_id}", method = RequestMethod.PUT, produces="application/json; charset=UTF-8")
-	public ResponseEntity<?> updateProduct(@PathVariable("product_id") Long id, 
+	public ResponseEntity<?> updateProduct(@PathVariable("product_id") Long id,
     		@RequestBody @Valid UpdateProductDTO dto) throws Exception {
-		
+
 		if (id==null) {
 			throw new Exception("Product Id is required fields");
 		}
 		Product currentProduct = productRepository.findById(id)
 				.orElseThrow(() -> new ProductBadRequestException("Product not found for this id : " + id));
-		
+
 		Double retailPrice = dto.getRetailPrice();
 		Double discountedPrice = dto.getDiscountedPrice();
 		Boolean availability = dto.getAvailability();
-		
-		if (retailPrice!=null) 
+
+		if (retailPrice!=null)
 			currentProduct.setRetailPrice(retailPrice);
 		if (discountedPrice!=null)
 			currentProduct.setDiscountedPrice(discountedPrice);
@@ -77,10 +77,10 @@ public class ProductsController {
 			currentProduct.setAvailability(availability);
 
 		productRepository.save(currentProduct);
-		
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Find specific product for the given Id.
 	 * @param id
@@ -93,13 +93,13 @@ public class ProductsController {
 		          .orElseThrow(() -> new ProductNotFoundException("Product not found for this id :: " + id));
 
 
-		
+
 		return new ResponseEntity<>(product,HttpStatus.OK);
-		
-		
+
+
 	}
-	
-	
+
+
 	/**
 	 * Retrieve All products.
 	 * @param category, availability
@@ -109,15 +109,15 @@ public class ProductsController {
 	public ResponseEntity<List<Product>> getProducts(
     		@RequestParam(value = "category", required = false) String category,
     		@RequestParam(value = "availability", required = false) Boolean availability) {
-		
+
 		List<Product> products;
 		if (category!=null && availability!=null) {
 			products = productRepository.findByCategoryAndAvailability(category.replaceAll("%20", " "),availability);
-			
+
 			Collections.sort(products, new DiscountPercentageComparator().reversed()
 					.thenComparing(Product::getDiscountedPrice)
                     .thenComparing(Product::getId));
-			
+
 		} else if (category !=null) {
 			products = productRepository.findByCategory(category,
 					Sort.by("availability").descending()
@@ -126,24 +126,24 @@ public class ProductsController {
 		}else {
 			products = productRepository.findByOrderByIdAsc();
 		}
-		 
+
 
 		return new ResponseEntity<>(products,HttpStatus.OK);
 	}
-	
-	
-	
+
+
+
 	class DiscountPercentageComparator implements Comparator<Product> {
-	    
+
 		@Override
 		public int compare(Product o1, Product o2) {
 			Double discPercentage1 =  ((o1.getRetailPrice() - o1.getDiscountedPrice())/o1.getRetailPrice() *100);
 			Double discPercentage2 =  ((o2.getRetailPrice() - o2.getDiscountedPrice())/o2.getRetailPrice() *100);
 			return discPercentage1.compareTo(discPercentage2);
 		}
-	}	
-	
-	
+	}
+
+
 	//Con mas tiempo quiza podria haber mejorado algunas cosas mas.
-	
+
 }
