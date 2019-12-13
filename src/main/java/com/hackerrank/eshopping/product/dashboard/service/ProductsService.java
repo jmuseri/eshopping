@@ -38,13 +38,13 @@ public class ProductsService {
 	 * @return
 	 * @throws ProductBadRequestException
 	 */
-	public ResponseEntity<?> create(Product product) throws ProductBadRequestException {
+	
+	public synchronized ResponseEntity<?> create(Product product) throws ProductBadRequestException {
 
-
+		
 		if (productRepository.existsById(product.getId())) {
 			throw new ProductBadRequestException("Product already exist for this id : " + product.getId());
 		}
-
 		productRepository.save(product);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
