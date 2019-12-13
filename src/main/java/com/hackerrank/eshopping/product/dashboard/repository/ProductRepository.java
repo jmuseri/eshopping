@@ -7,7 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.hackerrank.eshopping.product.dashboard.model.Product;
-
+/**
+ * Product JPA Repository.
+ * @author jmuseri
+ *
+ */
 public interface ProductRepository extends CrudRepository<Product, Long> {
 
 

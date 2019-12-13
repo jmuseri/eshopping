@@ -1,6 +1,10 @@
 package com.hackerrank.eshopping.product.dashboard.exception;
 import java.util.Date;
-
+/**
+ * Error Details Response DTO.
+ * @author jmuseri
+ *
+ */
 public class ErrorDetails {
  private Date timestamp;
  private String message;

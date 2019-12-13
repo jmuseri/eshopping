@@ -4,7 +4,11 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+/**
+ * Product DTO for Update Purpose.
+ * @author jmuseri
+ *
+ */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class UpdateProductDTO {
 	@NotNull
