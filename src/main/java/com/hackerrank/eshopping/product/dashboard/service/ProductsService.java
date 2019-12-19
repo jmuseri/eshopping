@@ -102,14 +102,14 @@ public class ProductsService {
 		List<Product> products;
 		if (category!=null && availability!=null) {
 			
-			products = productRepository.findByCategoryAndAvailability(category,availability);
+			products = productRepository.findByCategoryAndAvailability(category.replaceAll("%20", " "),availability);
 
 			Collections.sort(products, new DiscountPercentageComparator().reversed()
 					.thenComparing(Product::getDiscountedPrice)
                     .thenComparing(Product::getId));
 
 		} else if (category !=null) {
-			products = productRepository.findByCategory(category,
+			products = productRepository.findByCategory(category.replaceAll("%20", " "),
 					Sort.by("availability").descending()
 					.and(Sort.by("discountedPrice").ascending())
 					.and(Sort.by("id").ascending()));
